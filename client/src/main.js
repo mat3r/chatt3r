@@ -7,7 +7,7 @@ import './assets/styles/index.css';
 import VueSocketIO from 'vue-socket.io'
  
 Vue.use (new VueSocketIO({
-  connection: 'http://localhost:3000'
+  connection: 'http://192.168.2.23:3000'
 }));
 
 Vue.config.productionTip = false
