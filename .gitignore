@@ -1,0 +1,9 @@
+# Dependencies
+client/node_modules
+server/node_modules
+
+# local env files
+server/.env
+
+# Configuration files
+#client/src/config/
