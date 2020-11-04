@@ -13,30 +13,35 @@
       <button
         @click="$emit('leave-chat')"
         class="h-10 px-6 bg-gray-300 text-gray-800 rounded focus:outline-none focus:shadow-outline hover:shadow-lg"
-      >Leave Room</button>
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-current w-6 h-6">
+          <path class="text-indigo-400" d="M11 4h3a1 1 0 0 1 1 1v3a1 1 0 0 1-2 0V6h-2v12h2v-2a1 1 0 0 1 2 0v3a1 1 0 0 1-1 1h-3v1a1 1 0 0 1-1.27.96l-6.98-2A1 1 0 0 1 2 19V5a1 1 0 0 1 .75-.97l6.98-2A1 1 0 0 1 11 3v1z"/>
+          <path class="text-indigo-700" d="M18.59 11l-1.3-1.3c-.94-.94.47-2.35 1.42-1.4l3 3a1 1 0 0 1 0 1.4l-3 3c-.95.95-2.36-.46-1.42-1.4l1.3-1.3H14a1 1 0 0 1 0-2h4.59z"/>
+        </svg>
+      </button>
     </div>
 
     <!-- Chat Board Sidebar & Content Section -->
-    <div class="flex flex-col md:flex-row md:h-9/12">
+    <div class="flex flex-col md:flex-row md:h-4/5">
       <!-- Sidebar-->
-      <div class="md:w-64 p-4 bg-indigo-500">
+      <div class="md:w-64 p-2 md:p-4 bg-indigo-500">
         <!-- Room -->
         <div class="flex items-center ml-4 mb-2">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-current w-8 h-8">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-current w-6 h-6 md:w-8 md:h-8">
             <path class="text-white" d="M20.3 12.04l1.01 3a1 1 0 0 1-1.26 1.27l-3.01-1a7 7 0 1 1 3.27-3.27zM11 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
             <path class="text-white" d="M15.88 17.8a7 7 0 0 1-8.92 2.5l-3 1.01a1 1 0 0 1-1.27-1.26l1-3.01A6.97 6.97 0 0 1 5 9.1a9 9 0 0 0 10.88 8.7z"/>
           </svg>
-          <h4 class="ml-4 text-white text-lg font-bold">Chat Room:</h4>
+          <h4 class="ml-4 text-white md:text-lg font-bold">Chat Room:</h4>
         </div>
-        <div class="py-2 px-4 mb-6 w-full bg-indigo-600 text-white rounded-md tracking-wider font-bold">{{ room }}</div>
+        <div class="py-2 px-4 mb-2 md:mb-6 w-full bg-indigo-600 text-white rounded-md tracking-wider font-bold">{{ room }}</div>
 
         <!-- Users -->
         <div class="flex items-center ml-4 mb-1">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-current w-8 h-8">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-current w-6 h-6 md:w-8 md:h-8">
             <path class="text-gray-400" d="M12 13a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v3a1 1 0 0 1-1 1h-8a1 1 0 0 1-1-1 1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-3a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3zM7 9a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm10 0a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
             <path class="text-white" d="M12 13a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm-3 1h6a3 3 0 0 1 3 3v3a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-3a3 3 0 0 1 3-3z"/>
           </svg>
-          <h4 class="ml-4 text-white text-lg font-bold">Users:</h4>
+          <h4 class="ml-4 text-white md:text-lg font-bold">Users:</h4>
         </div>
         <ul class="hidden md:block">
           <li
@@ -47,7 +52,7 @@
         </ul>
         <div class="md:hidden mx-2">
           <span
-            class="pl-4 text-white"
+            class="pl-4 text-white text-sm"
             v-for="( user, index ) in users"
             :key="index"
           >{{ user.username }}</span>
@@ -55,7 +60,7 @@
       </div>
 
       <!-- Content: Messages -->
-      <div ref="mesgs" class="p-2 h-1/2 md:h-9/12 overflow-auto md:flex-1 bg-gray-200">
+      <div ref="mesgs" class="p-2 h-1/2 md:min-h-full overflow-auto md:flex-1 bg-gray-200">
         <ul class="px-8">
           <li
             class="flex mb-1 rounded-lg"

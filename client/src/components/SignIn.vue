@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full sm:w-1/2 md:1/3 lg:w-1/4 mx-auto">
-    <div class="h-16 mt-20 text-center bg-indigo-600">
+  <div class="w-full sm:w-1/2 md:1/3 lg:w-1/4 sm:mt-20 mx-auto">
+    <div class="h-16 text-center bg-indigo-600">
       <h2 class="pt-2 text-3xl font-bold tracking-wider text-white">Chatt3r</h2>
     </div>
     <div class="bg-indigo-400 p-4"v>
