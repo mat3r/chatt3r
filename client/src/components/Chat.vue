@@ -1,7 +1,8 @@
 <template>
-  <div class="container mx-auto">
+  <div class="md:container md:mx-auto">
+
     <!-- Chat Board Header -->
-    <div class="h-16 px-8 mt-6 bg-indigo-600 flex justify-between items-center">
+    <div class="h-16 px-8 md:mt-6 bg-indigo-600 flex justify-between items-center">
       <div class="flex items-center">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-current w-10 h-10">
           <circle cx="12" cy="12" r="10" class="text-white"/>
@@ -15,9 +16,11 @@
       >Leave Room</button>
     </div>
 
+    <!-- Chat Board Sidebar & Content Section -->
     <div class="flex flex-col md:flex-row md:h-9/12">
-    <!-- Side Panel -->
+      <!-- Sidebar-->
       <div class="md:w-64 p-4 bg-indigo-500">
+        <!-- Room -->
         <div class="flex items-center ml-4 mb-2">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-current w-8 h-8">
             <path class="text-white" d="M20.3 12.04l1.01 3a1 1 0 0 1-1.26 1.27l-3.01-1a7 7 0 1 1 3.27-3.27zM11 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
@@ -25,9 +28,9 @@
           </svg>
           <h4 class="ml-4 text-white text-lg font-bold">Chat Room:</h4>
         </div>
-
         <div class="py-2 px-4 mb-6 w-full bg-indigo-600 text-white rounded-md tracking-wider font-bold">{{ room }}</div>
 
+        <!-- Users -->
         <div class="flex items-center ml-4 mb-1">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-current w-8 h-8">
             <path class="text-gray-400" d="M12 13a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v3a1 1 0 0 1-1 1h-8a1 1 0 0 1-1-1 1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-3a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3zM7 9a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm10 0a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
@@ -35,28 +38,34 @@
           </svg>
           <h4 class="ml-4 text-white text-lg font-bold">Users:</h4>
         </div>
-
-        <ul>
+        <ul class="hidden md:block">
           <li
-            class="w-full py-1 pl-8 text-white"
+            class="py-1 pl-8 text-white"
             v-for="( user, index ) in users"
             :key="index"
           >{{ user.username }}</li>
         </ul>
+        <div class="md:hidden mx-2">
+          <span
+            class="pl-4 text-white"
+            v-for="( user, index ) in users"
+            :key="index"
+          >{{ user.username }}</span>
+        </div>
       </div>
 
-      <!-- Messages -->
-      <div ref="mesgs" class="p-2 overflow-auto md:flex-1 bg-gray-200">
+      <!-- Content: Messages -->
+      <div ref="mesgs" class="p-2 h-1/2 md:h-9/12 overflow-auto md:flex-1 bg-gray-200">
         <ul class="px-8">
           <li
-            class="flex"
-            :class="mesg.sender===username?'text-right justify-end':'justify-start'"
+            class="flex mb-1 rounded-lg"
+            :class="mesg.sender===username?'text-right justify-end border-r-8 border-green-500':'justify-start border-l-8 border-yellow-500'"
             v-for="mesg in messages"
             :key="mesg.id"
           >
           <div
-            class="mb-1 px-2 w-full md:w-4/5 py-1"
-            :class="mesg.sender===username?'bg-green-200':'bg-yellow-100'"
+            class="px-2 py-1"
+            :class="mesg.sender===username?'bg-green-200':'bg-yellow-200'"
             >
             <span v-if="mesg.sender!=='Admin'" class="mr-2 text-sm font-bold text-gray-600">{{ mesg.sender }}</span>
             <span class="text-xs text-gray-600">{{ formatDate(mesg.date) }}</span>
@@ -68,7 +77,7 @@
       </div>
     </div>
 
-    <!-- Enter Message Footer -->
+    <!-- Chat Board Footer: Enter Message -->
     <div class="h-20 px-8 bg-indigo-600 flex justify-between items-center">
       <input
         ref="myMesg"
@@ -97,13 +106,16 @@
 <script>
 // Imports
 import mainService from '@/services/mainService'
+import { mapState } from 'vuex'
 import { format} from 'date-fns'
 import { v4 as uuidv4 } from 'uuid'
 
 // Export component instance
 export default {
   name: 'Chat',
-  props: [ 'username', 'room' ],
+  computed: {
+    ...mapState([ 'username', 'users', 'room' ])
+  },
   async created () {
     try {
       const response = await mainService.loadMessages(this.room)
@@ -118,26 +130,12 @@ export default {
   data () {
     return {
       myMesg: null,
-      users: [],
       messages: []
     }
   },
   sockets: {
-    connect () {
-      console.log('*** Socket connected')
-    },
-    serverEmit (mesg) {
+    server (mesg) {
       this.messages.push(mesg)
-    },
-    newChatEmit (chat) {
-      this.messages.push(chat)
-    },
-    roomMessages (mesgs) {
-      this.messages = mesgs
-    },
-    roomUsers (chat) {
-      this.users = chat.users
-      this.room = chat.room
     }
   },
   methods: {
@@ -151,7 +149,7 @@ export default {
       })
     },
     sendMesg () {
-      this.$socket.emit('sendChat', this.myMesg)
+      this.$socket.emit('user', this.myMesg)
       this.myMesg = ''
       this.$refs.myMesg.focus()
     }

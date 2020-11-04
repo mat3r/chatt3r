@@ -5,8 +5,6 @@
       @join-chat="joinChat"
     ></sign-in>
     <chat
-      :username="username"
-      :room="room"
       v-if="showChat"
       @leave-chat="leaveChat"
     ></chat>
@@ -26,23 +24,21 @@ export default {
   },
   data () {
     return {
-      showChat: false,
-      username: null,
-      room: null
+      showChat: false
     }
   },
   methods: {
     joinChat (e) {
-      this.username = e.username
-      this.room = e.room
-      this.$socket.emit('joinRoom', e)
+      this.$store.commit('SET_USERNAME', e.username)
+      this.$store.commit('SET_ROOM', e.room)
+      this.$socket.emit('join', e)
       this.showChat = true
     },
     leaveChat() {
-      this.$socket.emit('leaveRoom')
+      this.$socket.emit('leave')
       this.showChat=false
-      this.username = null
-      this.room = null
+      this.$store.commit('CLEAR_USERNAME')
+      this.$store.commit('CLEAR_ROOM')
     }
   }
 }

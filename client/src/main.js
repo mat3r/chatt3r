@@ -5,10 +5,18 @@ import store from './store'
 
 import './assets/styles/index.css';
 import VueSocketIO from 'vue-socket.io'
- 
-Vue.use (new VueSocketIO({
-  connection: 'http://192.168.2.23:3000'
-}));
+import SocketIO from 'socket.io-client'
+
+Vue.use(new VueSocketIO({
+    debug: true,
+    connection: SocketIO('http://localhost:3000'),
+    vuex: {
+      store,
+      actionPrefix: "SOCKET_",
+      mutationPrefix: "SOCKET_"
+    }
+  })
+);
 
 Vue.config.productionTip = false
 
